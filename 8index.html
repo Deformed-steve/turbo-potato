@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Physics Simulation Project</title>
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; background: #f5f5f5; font-family: Arial; }
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 100;
+        }
+        #content {
+            width: 100%; height: 100vh; border: none; display: none;
+        }
+        .progress-container {
+            width: 300px; height: 8px; background: #e0e0e0;
+            border-radius: 4px; margin: 20px; overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%; width: 0%; background: #34a853;
+            transition: width 0.3s ease;
+        }
+        #status { margin-top: 10px; color: #555; }
+    </style>
+</head>
+<body>
+    <div id="loader">
+        <h2 style="color: #1a73e8;">Physics Simulation Project</h2>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress"></div>
+        </div>
+        <p id="status">Initializing simulation environment...</p>
+    </div>
+    <iframe id="content" sandbox="allow-scripts allow-same-origin"></iframe>
+
+    <script>
+        // ===== CORE LOADER =====
+        const loader = {
+            domains: [
+                'https://www.3dtuning.com/en-US/',
+                'https://3dtuning.web.app/',
+                'https://3dtuning.pages.dev/'
+            ],
+            
+            init() {
+                this.setupUI();
+                this.startLoading();
+                this.setupProtections();
+            },
+            
+            setupUI() {
+                // Rotate titles to avoid detection
+                const titles = [
+                    "Physics Simulation",
+                    "Google Docs",
+                    "STEM Research"
+                ];
+                let titleIndex = 0;
+                setInterval(() => {
+                    document.title = titles[titleIndex % titles.length];
+                    titleIndex++;
+                }, 5000);
+            },
+            
+            async startLoading() {
+                this.updateStatus("Checking network...", 20);
+                
+                // Try each domain in order
+                for (const domain of this.domains) {
+                    try {
+                        await this.tryDomain(domain);
+                        return this.showContent();
+                    } catch(e) {
+                        console.log("Failed to load from:", domain);
+                    }
+                }
+                
+                // Try cached version if all domains fail
+                try {
+                    await this.tryCachedVersion();
+                    this.showContent();
+                } catch(e) {
+                    this.showError("Offline mode unavailable. Try again with internet.");
+                }
+            },
+            
+            tryDomain(url) {
+                return new Promise((resolve, reject) => {
+                    const iframe = document.getElementById('content');
+                    this.updateStatus("Connecting to server...", 40);
+                    
+                    iframe.onload = () => {
+                        this.cacheCurrentPage();
+                        resolve();
+                    };
+                    
+                    iframe.onerror = reject;
+                    iframe.src = url;
+                    
+                    setTimeout(() => reject("Timeout"), 10000);
+                });
+            },
+            
+            tryCachedVersion() {
+                return new Promise((resolve, reject) => {
+                    this.updateStatus("Loading offline version...", 70);
+                    const cached = localStorage.getItem('3dt_cache');
+                    if (cached) {
+                        document.getElementById('content').srcdoc = cached;
+                        setTimeout(resolve, 500);
+                    } else {
+                        reject("No cache available");
+                    }
+                });
+            },
+            
+            cacheCurrentPage() {
+                try {
+                    const iframe = document.getElementById('content');
+                    if (iframe.contentDocument) {
+                        localStorage.setItem('3dt_cache',
+                            iframe.contentDocument.documentElement.outerHTML);
+                    }
+                } catch(e) {}
+            },
+            
+            showContent() {
+                this.updateStatus("Ready!", 100);
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+                }, 500);
+            },
+            
+            showError(message) {
+                document.getElementById('status').textContent = message;
+                document.getElementById('status').style.color = '#d32f2f';
+                document.getElementById('progress-bar').style.background = '#d32f2f';
+            },
+            
+            updateStatus(text, percent) {
+                document.getElementById('status').textContent = text;
+                document.getElementById('progress').style.width = percent + '%';
+            },
+            
+            setupProtections() {
+                // Auto-hide if no mouse movement
+                let lastActivity = Date.now();
+                document.addEventListener('mousemove', () => lastActivity = Date.now());
+                
+                setInterval(() => {
+                    if (Date.now() - lastActivity > 15000) {
+                        document.getElementById('content').style.opacity = '0.1';
+                    } else {
+                        document.getElementById('content').style.opacity = '1';
+                    }
+                }, 1000);
+                
+                // Emergency hide shortcut
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && e.altKey && e.key === 'h') {
+                        document.getElementById('content').style.display = 'none';
+                        document.getElementById('loader').style.display = 'flex';
+                    }
+                });
+            }
+        };
+
+        // Start when page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => loader.init(), 300);
+        });
+    </script>
+</body>
+</html>
