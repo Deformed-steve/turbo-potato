@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Science Project - Vehicle Aerodynamics</title>
+    <style>
+        body { margin: 0; font-family: Arial; background: #f5f5f5; }
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 1000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        #progress { width: 200px; height: 10px; background: #e0e0e0; margin-top: 10px; }
+        #progress-bar { height: 100%; width: 0%; background: #4CAF50; }
+        #content { width: 100%; height: 100vh; border: none; display: none; }
+    </style>
+</head>
+<body>
+    <div id="loader">
+        <h2>Loading Science Project Resources...</h2>
+        <div id="progress"><div id="progress-bar"></div></div>
+        <p id="status">Initializing secure connection...</p>
+    </div>
+    <iframe id="content" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+
+    <script>
+        // ===== PHASE 1: DELAYED LOADING (AVOID IMMEDIATE DETECTION) =====
+        setTimeout(() => {
+            document.getElementById('status').textContent = "Decrypting content...";
+            simulateProgress(20);
+
+            // ===== PHASE 2: DYNAMIC URL OBFUSCATION (SPLIT + BASE64) =====
+            setTimeout(() => {
+                const urlParts = [
+                    "aHR0cHM6Ly",  // Base64 chunks of "https://www.3dtuning.com/en-US/"
+                    "93d3cuM2R0",
+                    "dW5pbmcuY",
+                    "29tL2VuLV",
+                    "VTLw=="
+                ];
+                
+                // Reconstruct & decode
+                const fullB64 = urlParts.join('');
+                const realUrl = atob(fullB64);
+                
+                document.getElementById('status').textContent = "Verifying credentials...";
+                simulateProgress(50);
+
+                // ===== PHASE 3: IFRAME CLOAKING (LOAD AFTER DELAY) =====
+                setTimeout(() => {
+                    document.getElementById('status').textContent = "Rendering 3D models...";
+                    simulateProgress(80);
+                    
+                    setTimeout(() => {
+                        const iframe = document.getElementById('content');
+                        iframe.style.display = 'block';
+                        document.getElementById('loader').style.opacity = '0';
+                        
+                        // ===== FINAL LOAD (WITH ANTI-SNIFFING) =====
+                        setTimeout(() => {
+                            iframe.src = realUrl;
+                            document.getElementById('loader').style.display = 'none';
+                            
+                            // ===== TITLE ROTATION (AVOID TAB DETECTION) =====
+                            const titles = [
+                                "Science Project - Vehicle Aerodynamics",
+                                "Google Docs",
+                                "STEM Research"
+                            ];
+                            let currentTitle = 0;
+                            setInterval(() => {
+                                document.title = titles[currentTitle % titles.length];
+                                currentTitle++;
+                            }, 3000);
+                            
+                            // ===== MOUSE ACTIVITY DETECTION (HIDE IF ADMIN IS NEARBY) =====
+                            let lastActivity = Date.now();
+                            document.addEventListener('mousemove', () => lastActivity = Date.now());
+                            
+                            setInterval(() => {
+                                if (Date.now() - lastActivity > 10000) { // 10s inactive
+                                    iframe.style.opacity = '0.05';
+                                    document.title = "Google Docs";
+                                } else {
+                                    iframe.style.opacity = '1';
+                                }
+                            }, 1000);
+                        }, 1000);
+                    }, 1500);
+                }, 1000);
+            }, 1000);
+        }, 3000);
+
+        function simulateProgress(percent) {
+            let current = 0;
+            const interval = setInterval(() => {
+                current += 1;
+                document.getElementById('progress-bar').style.width = `${current}%`;
+                if (current >= percent) clearInterval(interval);
+            }, 20);
+        }
+    </script>
+</body>
+</html>
