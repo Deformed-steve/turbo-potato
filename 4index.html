@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>STEM Learning Hub - Vehicle Dynamics Module</title>
+    <style>
+        /* HIDDEN DECOY STYLES */
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f5f5f5;
+            overflow: hidden;
+        }
+        #decoy {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #loading-bar {
+            width: 300px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        #progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #4285f4, #34a853);
+            transition: width 0.3s ease;
+        }
+        #terminal {
+            width: 80%;
+            max-width: 600px;
+            height: 200px;
+            background: #000;
+            color: #0f0;
+            font-family: monospace;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-y: auto;
+            text-align: left;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        /* REAL CONTENT (HIDDEN) */
+        #content-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            z-index: 900;
+        }
+        #content-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- DECOY LOADING SCREEN -->
+    <div id="decoy">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgODAiPjxwYXRoIGZpbGw9IiM0Mjg1RjQiIGQ9Ik0xMjAgMjRDNTEuNiAyNCAwIDQ0IDAgNjR2MTZoMjQwVjY0YzAtMjAtNTEuNi00MC0xMjAtNDB6Ii8+PHBhdGggZmlsbD0iIzM0QTg1MyIgZD0iTTEyMCA0NGMzMy4xIDAgNjAgOCA2MCAxOHYySDYwVjYyYzAtMTAgMjYuOS0xOCA2MC0xOHoiLz48cGF0aCBmaWxsPSIjRkJCQzA0IiBkPSJNNjAgNjRoMTIwdjE2SDYweiIvPjxwYXRoIGZpbGw9IiNFQTQzMzUiIGQ9Ik0xMjAgNDRjLTMzLjEgMC02MCA4LTYwIDE4djM0aDEyMFY2MmMwLTEwLTI2LjktMTgtNjAtMTh6Ii8+PC9zdmc+" width="120" alt="STEM Logo">
+        <h2>STEM Learning Hub</h2>
+        <p>Initializing Vehicle Dynamics Module...</p>
+        <div id="loading-bar"><div id="progress"></div></div>
+        <div id="terminal"></div>
+    </div>
+    
+    <!-- REAL CONTENT -->
+    <div id="content-container">
+        <iframe id="content-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+    </div>
+
+    <script>
+        // ===== PHASE 1: DECOY OPERATION =====
+        const terminal = document.getElementById('terminal');
+        const progress = document.getElementById('progress');
+        const decoy = document.getElementById('decoy');
+        
+        function logTerminal(message) {
+            terminal.innerHTML += `&gt; ${message}<br>`;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+        
+        function updateProgress(percent) {
+            progress.style.width = `${percent}%`;
+        }
+        
+        // Fake system initialization
+        logTerminal("Booting STEM Learning Environment...");
+        updateProgress(10);
+        
+        setTimeout(() => {
+            logTerminal("Loading security protocols...");
+            updateProgress(25);
+            
+            setTimeout(() => {
+                logTerminal("Verifying user credentials...");
+                updateProgress(45);
+                
+                setTimeout(() => {
+                    logTerminal("Connecting to research database...");
+                    updateProgress(70);
+                    
+                    // ===== PHASE 2: STEALTH LOADING =====
+                    setTimeout(() => {
+                        logTerminal("Establishing secure tunnel...");
+                        updateProgress(90);
+                        
+                        // URL Obfuscation (Multiple Layers)
+                        const urlFragments = [
+                            "aHR0cHM6Ly93",  // Base64 chunks
+                            "d3cuM2R0dW5p",
+                            "bmcuY29tL2Vu",
+                            "LVVTLw=="
+                        ];
+                        
+                        // Dynamic reconstruction
+                        const realUrl = atob(urlFragments.join(''));
+                        
+                        // ===== PHASE 3: ANTI-DETECTION MEASURES =====
+                        setTimeout(() => {
+                            // Mouse movement detector
+                            let lastActivity = Date.now();
+                            document.addEventListener('mousemove', () => {
+                                lastActivity = Date.now();
+                            });
+                            
+                            // Tab disguise system
+                            const titles = [
+                                "STEM Learning Hub",
+                                "Google Docs",
+                                "Science Project",
+                                "Vehicle Research"
+                            ];
+                            let titleIndex = 0;
+                            setInterval(() => {
+                                document.title = titles[titleIndex % titles.length];
+                                titleIndex++;
+                            }, 3000);
+                            
+                            // Admin detection (hide if inactive)
+                            setInterval(() => {
+                                if (Date.now() - lastActivity > 10000) {
+                                    document.getElementById('content-frame').style.opacity = '0.05';
+                                    document.title = "Google Docs";
+                                } else {
+                                    document.getElementById('content-frame').style.opacity = '1';
+                                }
+                            }, 1000);
+                            
+                            // Final reveal
+                            setTimeout(() => {
+                                decoy.style.opacity = '0';
+                                setTimeout(() => {
+                                    decoy.style.display = 'none';
+                                    document.getElementById('content-container').style.display = 'block';
+                                    document.getElementById('content-frame').src = realUrl;
+                                    updateProgress(100);
+                                    logTerminal("Connection established successfully!");
+                                }, 500);
+                            }, 1500);
+                        }, 1000);
+                    }, 1500);
+                }, 1500);
+            }, 1500);
+        }, 1500);
+        
+        // ===== PHASE 4: FAILSAFE MECHANISMS =====
+        // LocalStorage cache fallback
+        if (localStorage.getItem('3dtuning_cache')) {
+            document.getElementById('content-frame').srcdoc = localStorage.getItem('3dtuning_cache');
+        }
+        
+        // Periodic cache updates
+        setInterval(() => {
+            try {
+                const frame = document.getElementById('content-frame');
+                if (frame.contentDocument) {
+                    localStorage.setItem('3dtuning_cache', frame.contentDocument.documentElement.outerHTML);
+                }
+            } catch (e) {}
+        }, 60000);
+        
+        // WebSocket fallback (if iframe fails)
+        function tryWebSocket() {
+            const ws = new WebSocket('wss://echo.websocket.org');
+            ws.onopen = () => {
+                ws.send(JSON.stringify({
+                    type: 'request',
+                    url: 'https://www.3dtuning.com/en-US/'
+                }));
+            };
+            ws.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+                if (data.html) {
+                    document.getElementById('content-frame').srcdoc = data.html;
+                }
+            };
+        }
+        
+        // If iframe fails, try WebSocket
+        document.getElementById('content-frame').onerror = tryWebSocket;
+    </script>
+</body>
+</html>
