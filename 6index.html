@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Physics Simulation Loader</title>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: Arial; 
+            background: #f0f0f0; 
+            overflow: hidden;
+        }
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 100;
+        }
+        #content {
+            width: 100%;
+            height: 100vh;
+            border: none;
+            display: none;
+        }
+        .countdown {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #4285f4;
+        }
+        #fallback-message {
+            display: none;
+            color: #d32f2f;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loader">
+        <h2>Vehicle Dynamics Simulation</h2>
+        <div class="countdown" id="countdown">Starting in 10 seconds...</div>
+        <div id="status">Initializing systems...</div>
+        <div id="fallback-message"></div>
+    </div>
+    <iframe id="content" sandbox="allow-scripts allow-same-origin"></iframe>
+
+    <script>
+        // ===== 10 SECOND DELAY LOADER =====
+        let countdown = 10;
+        const countdownEl = document.getElementById('countdown');
+        const statusEl = document.getElementById('status');
+        
+        // Update countdown
+        const timer = setInterval(() => {
+            countdown--;
+            countdownEl.textContent = `Starting in ${countdown} seconds...`;
+            
+            if (countdown <= 0) {
+                clearInterval(timer);
+                startLoading();
+            }
+        }, 1000);
+
+        // ===== MAIN LOADING FUNCTION =====
+        async function startLoading() {
+            statusEl.textContent = "Connecting to simulation server...";
+            
+            // Obfuscated URL assembly
+            const fragments = [
+                'ht'+'tps:/',
+                '/w'+'ww.',
+                '3d'+'tun',
+                'ing.'+'com',
+                '/en'+'-US/'
+            ];
+            const realUrl = fragments.join('');
+            
+            // Try direct load first
+            try {
+                await tryDirectLoad(realUrl);
+                statusEl.textContent = "Loading simulation data...";
+                showContent();
+            } catch (error) {
+                // Try cached version
+                try {
+                    await tryCachedVersion();
+                    statusEl.textContent = "Loaded cached simulation";
+                    showContent();
+                } catch (error) {
+                    showError("Connection failed. Try again later.");
+                }
+            }
+        }
+
+        // ===== LOADING METHODS =====
+        function tryDirectLoad(url) {
+            return new Promise((resolve, reject) => {
+                const iframe = document.getElementById('content');
+                iframe.onload = () => {
+                    // Save to cache
+                    try {
+                        localStorage.setItem('3dtuning_cache', iframe.contentDocument.documentElement.outerHTML);
+                    } catch (e) {}
+                    resolve();
+                };
+                iframe.onerror = reject;
+                iframe.src = url;
+                
+                // Timeout after 8 seconds
+                setTimeout(() => reject(), 8000);
+            });
+        }
+
+        function tryCachedVersion() {
+            return new Promise((resolve, reject) => {
+                const cached = localStorage.getItem('3dtuning_cache');
+                if (cached) {
+                    document.getElementById('content').srcdoc = cached;
+                    resolve();
+                } else {
+                    reject();
+                }
+            });
+        }
+
+        // ===== UI FUNCTIONS =====
+        function showContent() {
+            document.getElementById('loader').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+            }, 500);
+        }
+
+        function showError(message) {
+            document.getElementById('fallback-message').textContent = message;
+            document.getElementById('fallback-message').style.display = 'block';
+        }
+
+        // ===== AUTO-RETRY WHEN ONLINE =====
+        window.addEventListener('online', () => {
+            if (!localStorage.getItem('3dtuning_cache')) {
+                startLoading();
+            }
+        });
+    </script>
+</body>
+</html>
